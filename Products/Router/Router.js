@@ -25,7 +25,16 @@ router.delete('/category/:id', async (req, res) => {
         res.status(500).json({ error: 'Ошибка сервера' });
     }
 });
-
+// Информация о разделе
+router.get('/section/:id', async (req, res) => {
+    try {
+        const section = await Section.find()
+            .populate('products');
+        res.json(section);
+    } catch (e) {
+        console.log(e);
+    }
+})
 // Редактирование категории по идентификатору (id)
 router.put('/category/:id', async (req, res) => {
     try {
