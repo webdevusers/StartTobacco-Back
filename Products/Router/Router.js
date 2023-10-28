@@ -220,4 +220,14 @@ router.get('/product/find/:id', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+router.get('/actions', async (req, res) => {
+    try {
+        const categories = await Category.find()
+            .populate('sections');
+        res.json(categories);
+    } catch (e) {
+        console.log(e);
+    }
+});
+
 module.exports = router;
