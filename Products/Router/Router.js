@@ -172,5 +172,52 @@ router.get('/products/sale', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
-
+// Retrieving a section by its identifier (id)
+router.get('/section/find/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const section = await Section.findById(id);
+        if (!section) {
+            return res.status(404).json({ status: 'Section not found' });
+        }
+        res.status(200).json({ section });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+// Retrieving a category by its identifier (id)
+router.get('/category/find/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const category = await Category.findById(id);
+        if (!category) {
+            return res.status(404).json({ status: 'Category not found' });
+        }
+        res.status(200).json({ category });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+// Retrieving all categories
+router.get('/categories', async (req, res) => {
+    try {
+        const categories = await Category.find();
+        res.status(200).json({ categories });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+// Retrieving a product by its identifier (id)
+router.get('/product/find/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ status: 'Product not found' });
+        }
+        res.status(200).json({ product });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 module.exports = router;
