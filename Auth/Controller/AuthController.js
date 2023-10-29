@@ -57,23 +57,23 @@ class AuthController {
     }
     async changeRole(req, res) {
         const { id, role } = req.body;
-        
+
         try {
             const user = await User.findById(id);
-            
+
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
-            
+
             user.roles = [role];
             await user.save();
-            
+
             return res.status(200).json({ message: 'User role changed successfully' });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error: 'Internal server error' });
         }
-    }    
+    }
     async getUsers(req, res) {
         try {
             const users = await User.find();
@@ -82,6 +82,57 @@ class AuthController {
             console.log(e)
         }
     }
+    async verify(req, res) {
+        const { token } = req.body;
+
+        try {
+            const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7")
+            const id = decoded.id
+            res.status(200).json({ id })
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    async likedProduct(req, res) {
+        try {
+            const { userID, productID } = req.body;
+
+            const user = await User.findById(userID);
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            user.liked.push({ productID });
+            await user.save();
+
+            return res.status(200).json({ message: 'Product liked successfully' });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    async dislikeProduct(req, res) {
+        try {
+            const { userID, productID } = req.body;
+
+            const user = await User.findById(userID);
+
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            user.liked = user.liked.filter(item => item.productID !== productID);
+            await user.save();
+
+            return res.status(200).json({ message: 'Product disliked successfully' });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
 }
 
 module.exports = new AuthController();
