@@ -7,6 +7,7 @@ const Product = new Schema({
     isOnSale: Boolean,
     oldPrice: Number,
     newPrice: Number,
+    ratingVoid: Number,
     text: String,
     containerVolume: [
         {
