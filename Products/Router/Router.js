@@ -25,16 +25,7 @@ router.delete('/category/:id', async (req, res) => {
         res.status(500).json({ error: 'Ошибка сервера' });
     }
 });
-// Информация о разделе
-router.get('/section/:id', async (req, res) => {
-    try {
-        const section = await Section.find()
-            .populate('products');
-        res.json(section);
-    } catch (e) {
-        console.log(e);
-    }
-})
+
 // Редактирование категории по идентификатору (id)
 router.put('/category/:id', async (req, res) => {
     try {
@@ -186,7 +177,7 @@ router.get('/section/find/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const section = await Section.findById(id)
-        .populate('products');
+            .populate('products');
         if (!section) {
             return res.status(404).json({ status: 'Section not found' });
         }
@@ -208,6 +199,28 @@ router.get('/category/find/:id', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+router.get('/category/findAll/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const category = await Category.findById(id).populate('sections');
+        if (!category) {
+            return res.status(404).json({ status: 'Category not found' });
+        }
+        res.status(200).json({ category });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+})
+// Получение раздела
+router.get('/section/:id', async (req, res) => {
+    try {
+        const section = await Section.find()
+            .populate('products');
+        res.json(section);
+    } catch (e) {
+        console.log(e);
+    }
+})
 // Retrieving all categories
 router.get('/categories', async (req, res) => {
     try {
@@ -239,5 +252,4 @@ router.get('/actions', async (req, res) => {
         console.log(e);
     }
 });
-
 module.exports = router;
