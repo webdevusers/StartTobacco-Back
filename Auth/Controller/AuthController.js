@@ -158,6 +158,10 @@ class AuthController {
         user.surname = updatedData.surname
         user.email = updatedData.email
         user.phone = updatedData.phone
+
+        await user.save();
+
+        res.status(200).json({edited: "true"})
     }
     async addOrder(req, res) {
         try {
