@@ -9,4 +9,6 @@ router.get('/getall', controller.getUsers)
 router.post('/like', controller.likedProduct)
 router.post('/dislike', controller.dislikeProduct)
 router.post('/get', controller.getUser)
+router.post('/addOrder', controller.addOrder)
+router.post('/edit', controller.editUser)
 module.exports = router;
