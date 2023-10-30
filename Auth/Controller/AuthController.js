@@ -20,7 +20,8 @@ class AuthController {
             const hashPassword = hashSync(password, 7)
             const userRole = await Role.findOne({ value: 'Пользователь' })
             const user = await new User({
-                fullName,
+                name,
+                surname,
                 email,
                 phone,
                 password: hashPassword,
