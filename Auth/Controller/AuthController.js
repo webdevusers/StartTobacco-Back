@@ -13,8 +13,8 @@ const generateToken = (id) => {
 class AuthController {
     async registration(req, res) {
         try {
-            const { fullName, email, phone, password, roles } = req.body;
-            if (!fullName && !email && !phone && !password && !roles) {
+            const { name, surname, email, phone, password, roles } = req.body;
+            if (!name && !surname && !email && !phone && !password && !roles) {
                 res.status(400).json({ status: 400 })
             }
             const hashPassword = hashSync(password, 7)
@@ -132,7 +132,7 @@ class AuthController {
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
-        async getUser(req, res) {
+    async getUser(req, res) {
         try {
             const { token } = req.body;
 
@@ -148,7 +148,36 @@ class AuthController {
 
         } catch (e) { console.log(e) }
     }
+    async editUser(req, res) {
+        const { id, updatedData } = req.body;
 
+        const user = await User.findById(id)
+
+        user.name = updatedData.name
+        user.surname = updatedData.surname
+        user.email = updatedData.email
+        user.phone = updatedData.phone
+    }
+    async addOrder(req, res) {
+        try {
+            const { token, orderID } = req.body;
+
+            const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7")
+            const id = decoded.id
+
+            const user = await User.findById(id)
+
+            if (!user) {
+                res.status(400).json({ status: "exist" })
+            }
+
+            user.orders.push(orderID)
+
+            await user.save()
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 module.exports = new AuthController();
