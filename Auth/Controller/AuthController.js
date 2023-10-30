@@ -132,6 +132,22 @@ class AuthController {
             return res.status(500).json({ error: 'Internal server error' });
         }
     }
+        async getUser(req, res) {
+        try {
+            const { token } = req.body;
+
+            const decoded = jwt.verify(token, secret)
+            const id = decoded.id
+
+            const user = await User.findById(id);
+
+            if (!user) {
+                res.status(404).json({ status: "exist" })
+            }
+            res.status(200).json({ user })
+
+        } catch (e) { console.log(e) }
+    }
 
 }
 
