@@ -136,7 +136,7 @@ class AuthController {
         try {
             const { token } = req.body;
 
-            const decoded = jwt.verify(token, secret)
+            const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7")
             const id = decoded.id
 
             const user = await User.findById(id);
