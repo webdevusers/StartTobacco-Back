@@ -201,12 +201,19 @@ router.get('/category/find/:id', async (req, res) => {
 });
 router.get('/category/findAll/:id', async (req, res) => {
     try {
-        const { id } = req.params;
-        const category = await Category.findById(id).populate('sections');
-        if (!category) {
-            return res.status(404).json({ status: 'Category not found' });
-        }
-        res.status(200).json({ category });
+            const categories = await Category.find()
+                .populate({
+                    path: 'subcategories',
+                    populate: {
+                        path: 'sections',
+                        model: 'Section',
+                        // populate: {
+                        //     path: 'products',
+                        //     model: 'Product'
+                        // }
+                    }
+                })
+        res.status(200).json({categories})
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
