@@ -165,7 +165,7 @@ class AuthController {
     }
     async addOrder(req, res) {
         try {
-            const { token, orderID } = req.body;
+            const { token, Object } = req.body;
 
             const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7")
             const id = decoded.id
@@ -176,7 +176,7 @@ class AuthController {
                 res.status(400).json({ status: "exist" })
             }
 
-            user.orders.push(orderID)
+            user.orders.push(Object)
 
             await user.save()
         } catch (e) {
