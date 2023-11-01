@@ -2,6 +2,7 @@ const User = require('../models/User')
 const Role = require('../models/Role')
 const jwt = require('jsonwebtoken')
 const { hashSync, compareSync } = require("bcrypt");
+const Product = require('../../Products/Models/Product')
 
 const generateToken = (id) => {
     const payload = {
@@ -184,6 +185,119 @@ class AuthController {
             console.log(e)
         }
     }
+    async views(req, res) {
+        try {
+            const {token, productId} = req.body;
+            const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7")
+            const id = decoded.id
+            const user = await User.findById(id);
+
+            if (!user) {
+                return res.status(404).json({message: 'Пользователь не найден'});
+            }
+
+            user.views.unshift(productId);
+
+            if (user.views.length > 16) {
+                user.views.pop();
+            }
+
+            await user.save();
+
+            return res.status(200).json({message: 'Товар успешно добавлен в просмотры пользователя'});
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({message: 'Произошла ошибка сервера'});
+        }
+    }
+    async getLiked(req, res) {
+        const { token } = req.body;
+    
+        const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
+        const id = decoded.id;
+        const user = await User.findById(id);
+    
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+    
+        const likedProducts = user.liked.map(like => like.productID);
+        console.log(likedProducts);
+    
+        const products = [];
+    
+        for (let i = 0; i < likedProducts.length; i++) {
+            try {
+                const product = await Product.findById(likedProducts[i]);
+                console.log(likedProducts[i]);
+                console.log(product);
+            
+                if (product) {
+                    products.push(product);
+                } else {
+                    console.log(`Product with ID ${likedProducts[i]} not found`);
+                }
+            } catch (error) {
+                console.error("Error fetching product:", error.message);
+            }            
+        }
+    
+        res.json({ likedProducts: products });
+    }
+    async getOrderedProducts(req, res) {
+        const { token } = req.body;
+    
+        const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
+        const id = decoded.id;
+        const user = await User.findById(id);
+    
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+    
+        const allOrderedProducts = [];
+    
+        user.orders.forEach(order => {
+            const orderProducts = order.order.map(item => item.products);
+            allOrderedProducts.push(...orderProducts);
+        });
+    
+        res.json({ orderedProducts: allOrderedProducts });
+    }
+    async getViews(req, res) {
+        const { token } = req.body;
+    
+        const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
+        const id = decoded.id;
+        const user = await User.findById(id);
+    
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+    
+        const likedProducts = user.liked.map(like => like.productID);
+        console.log(likedProducts);
+    
+        const products = [];
+    
+        for (let i = 0; i < likedProducts.length; i++) {
+            try {
+                const product = await Product.findById(likedProducts[i]);
+                console.log(likedProducts[i]);
+                console.log(product);
+            
+                if (product) {
+                    products.push(product);
+                } else {
+                    console.log(`Product with ID ${likedProducts[i]} not found`);
+                }
+            } catch (error) {
+                console.error("Error fetching product:", error.message);
+            }            
+        }
+    
+        res.json({ views: products });
+    }   
 }
 
 module.exports = new AuthController();

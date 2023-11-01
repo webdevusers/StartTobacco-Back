@@ -29,6 +29,9 @@ const User = new Schema({
     liked: [{
         type: Object,
     }],
+    views: [{
+        type: Object,
+    }],
     orders: [{
         type: Object,
     }],
