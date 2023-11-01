@@ -179,6 +179,7 @@ class AuthController {
             user.orders.push(Object)
 
             await user.save()
+            res.status(200).json({created: "true"})
         } catch (e) {
             console.log(e)
         }
