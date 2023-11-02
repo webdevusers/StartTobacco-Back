@@ -221,7 +221,7 @@ class AuthController {
             return res.status(404).json({ error: "User not found" });
         }
     
-        const likedProducts = user.liked.map(like => like.productID);
+        const likedProducts = user.liked.map(views => views.productID);
         console.log(likedProducts);
     
         const products = [];
