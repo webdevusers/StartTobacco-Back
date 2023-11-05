@@ -7,15 +7,17 @@ const Product = new Schema({
     isOnSale: Boolean,
     oldPrice: Number,
     newPrice: Number,
-    ratingVoid: Number,
     text: String,
     containerVolume: [
         {
             id: Number,
             value: String,
             name: String,
+            oldPrice: Number,
+            newPrice: Number,
         },
     ],
+    stock_quantity: Number,
     Section: Schema.Types.ObjectId
 });
 

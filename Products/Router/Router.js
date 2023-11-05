@@ -202,12 +202,7 @@ router.get('/category/find/:id', async (req, res) => {
 router.get('/category/findAll/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const category = await Category.findById(id).populate({
-            path: 'sections',
-            populate: {
-                path: 'products'
-            }
-        });
+        const category = await Category.findById(id).populate('sections');
         if (!category) {
             return res.status(404).json({ status: 'Category not found' });
         }
@@ -215,8 +210,7 @@ router.get('/category/findAll/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
-});
-
+})
 // Получение раздела
 router.get('/section/:id', async (req, res) => {
     try {
@@ -258,4 +252,19 @@ router.get('/actions', async (req, res) => {
         console.log(e);
     }
 });
+router.get('/search/:request', async (req, res) => {
+    try {
+        const { request } = req.params;
+        const regex = new RegExp(request, 'i');
+        const products = await Product.find({ title: regex }).exec();
+        res.status(200).json({ products });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
+
+
+
 module.exports = router;
