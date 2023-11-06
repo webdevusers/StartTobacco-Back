@@ -202,15 +202,17 @@ router.get('/category/find/:id', async (req, res) => {
 router.get('/category/findAll/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const category = await Category.findById(id).populate('sections');
-        if (!category) {
-            return res.status(404).json({ status: 'Category not found' });
-        }
-        res.status(200).json({ category });
-    } catch (error) {
-        res.status(500).json({ error: 'Server error' });
+        const category = await Category.findById(id).populate({
+          path: 'sections',
+          populate: {
+            path: 'products',
+          }
+        });
+        res.status(200).json({category})
+    } catch(e) {
+        console.log(e)
     }
-})
+});
 // Получение раздела
 router.get('/section/:id', async (req, res) => {
     try {
