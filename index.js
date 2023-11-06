@@ -13,6 +13,7 @@ app.use(express.json())
 
 app.use("/user", authRouter)
 app.use("/items", productRouter)
+app.use("/order", orderRouter)
 
 const start = async () => {
     try {
