@@ -17,7 +17,12 @@ app.use("/items", productRouter)
 const start = async () => {
     try {
         await mongoose.connect('mongodb+srv://devusersvue:jXSFM1kfpDMF7RB7@starttobacco.qp2fq2p.mongodb.net/?retryWrites=true&w=majority');
-        app.listen(port, () => { console.log(`Server is running on port ${port}`);}
-    } catch(e) { console.log(e)}
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+    } catch (e) {
+        console.log(e)
+    }
 }
 start();
