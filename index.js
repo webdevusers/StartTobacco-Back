@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 
 const authRouter = require('./Auth/Router/AuthRouter')
 const productRouter = require('./Products/Router/Router')
-
+const orderRouter = require('./Orders/router/router')
 
 app.use(cors())
 app.use(express.json())
