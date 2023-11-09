@@ -40,6 +40,16 @@ class OrderController {
             console.log(e)
         }
     }
+    async delete(req, res) {
+        try {
+            const {id} = req.body;
+            const order = await Order.findByIdAndDelete(id);
+            res.status(200).json({deleted: "true"})
+        } catch(e) { 
+            console.log(e)         
+            res.status(500).json({error: "An error occurred"});
+        }
+    }
 }
 
 module.exports = new OrderController();
