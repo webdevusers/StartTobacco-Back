@@ -9,6 +9,8 @@ class OrderController {
                 typeDelivery,
                 deliveryAddress,
                 typePayment,
+                phone,
+                status,
                 order
             } = req.body;
 
@@ -21,6 +23,8 @@ class OrderController {
                 typeDelivery,
                 deliveryAddress,
                 typePayment,
+                phone,
+                status,
                 order
             }).save()
             res.status(200).json({order: "created"})

@@ -6,6 +6,8 @@ const Order = new Schema({
     typeDelivery: String,
     deliveryAddress: String,
     typePayment: String,
+    phone: String,
+    status: String,
     order: Array,
 })
 
