@@ -4,6 +4,6 @@ const controller = require('../controller/controller')
 
 router.post('/create', controller.create)
 router.get('/get', controller.get)
-router.delete('/delete', controller.delete)
+router.post('/delete', controller.delete)
 
 module.exports = router;
