@@ -24,7 +24,7 @@ class OrderController {
                 deliveryAddress,
                 typePayment,
                 phone,
-                status,
+                status: "Не просмотрено",
                 order
             }).save()
             res.status(200).json({order: "created"})
@@ -48,6 +48,14 @@ class OrderController {
         } catch(e) { 
             console.log(e)         
             res.status(500).json({error: "An error occurred"});
+        }
+    }
+    async getUnviewed(req, res) {
+        try {
+            const unviewedOrders = await Order.find({ status: "Не просмотрено" });
+            res.status(200).json({ Orders: unviewedOrders });
+        } catch(e) {
+            console.log(e);
         }
     }
 }
