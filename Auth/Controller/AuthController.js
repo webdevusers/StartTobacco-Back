@@ -233,13 +233,7 @@ class AuthController {
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-
-        const product = await Product.findById(productId);
-        if (!product) {
-            return res.status(404).json({ error: "Product not found" });
-        }
-
-        user.views.push({ productID: productId });
+        user.views.push({ productId });
         await user.save();
 
         res.json({ success: true, message: "Product added to views" });
