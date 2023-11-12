@@ -26,6 +26,9 @@ const User = new Schema({
         type: String,
         ref: 'Role'
     }],
+    views: [{
+        type: Object,
+    }],
     liked: [{
         type: Object,
     }],

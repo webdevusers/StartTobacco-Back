@@ -1,6 +1,7 @@
 const User = require('../models/User')
 const Role = require('../models/Role')
 const jwt = require('jsonwebtoken')
+const Product = require('../../Products/Models/Product')
 const { hashSync, compareSync } = require("bcrypt");
 
 const generateToken = (id) => {
@@ -178,6 +179,74 @@ class AuthController {
         } catch (e) {
             console.log(e)
         }
+    }
+    async getFavoriteProducts(req, res) {
+        const { token } = req.body;
+    
+        const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
+        const id = decoded.id;
+        const user = await User.findById(id);
+    
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+    
+        const favoriteProductIds = user.liked.map(like => like.productID);
+    
+        try {
+            const favoriteProducts = await Product.find({ _id: { $in: favoriteProductIds } });
+            res.json({ favoriteProducts });
+        } catch (error) {
+            console.error("Error fetching favorite products:", error.message);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
+    async getViewedProducts(req, res) {
+        const { token } = req.body;
+    
+        const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
+        const id = decoded.id;
+        const user = await User.findById(id);
+    
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+    
+        const viewedProductIds = user.views.map(view => view.productID);
+    
+        try {
+            const viewedProducts = await Product.find({ _id: { $in: viewedProductIds } });
+            res.json({ viewedProducts });
+        } catch (error) {
+            console.error("Error fetching viewed products:", error.message);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
+    async addViews(req, res) {
+        const { token, productId } = req.body;
+
+    try {
+        const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
+        const userId = decoded.id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+
+        user.views.push({ productID: productId });
+        await user.save();
+
+        res.json({ success: true, message: "Product added to views" });
+    } catch (error) {
+        console.error("Error adding viewed product:", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
     }
 }
 
