@@ -223,24 +223,25 @@ class AuthController {
         }
     }
     async addViews(req, res) {
-        const { token, productId } = req.body;
+        try {
+            const { token, productID } = req.body;
 
-    try {
-        const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
-        const userId = decoded.id;
-        const user = await User.findById(userId);
+            const decoded = jwt.verify(token, "jXSFM1kfpDMF7RB7");
+            const id = decoded.id;
+            const user = await User.findById(id);    
 
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            user.views.push({ productID: productID });
+            await user.save();
+
+            return res.status(200).json({ message: 'Product added to views successfully' });
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ error: 'Internal server error' });
         }
-        user.views.push({ productId });
-        await user.save();
-
-        res.json({ success: true, message: "Product added to views" });
-    } catch (error) {
-        console.error("Error adding viewed product:", error.message);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
     }
 }
 
