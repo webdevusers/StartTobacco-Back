@@ -152,6 +152,21 @@ router.get('/products/popular', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+router.get('/getAllProducts', async (req, res) => {
+    try {
+        const products = await Category.find().populate({
+            path: 'sections',
+            populate: {
+                path: 'products',
+                model: 'Product'
+            }
+        });
+
+        res.status(200).json({ products });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 
 // Retrieving new products
 router.get('/products/new', async (req, res) => {
