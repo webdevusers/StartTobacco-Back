@@ -142,6 +142,28 @@ router.put('/product/:id', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+router.put('/product/liked/:id', async (req, res) => {
+  const { id } = req.params;
+  const { liked } = req.body;
+
+  try {
+    await Product.findByIdAndUpdate(id, { liked: liked });
+    res.status(200).json({ message: 'Product successfully updated' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+router.put('/product/isOnSale/:id', async (req, res) => {
+  const { id } = req.params;
+  const { isOnSale } = req.body;
+
+  try {
+    await Product.findByIdAndUpdate(id, { isOnSale: isOnSale });
+    res.status(200).json({ message: 'Product successfully updated' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 // Retrieving popular products
 router.get('/products/popular', async (req, res) => {
