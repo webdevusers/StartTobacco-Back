@@ -164,6 +164,45 @@ router.put('/product/isOnSale/:id', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+router.get('/product/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Найти продукт по идентификатору
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Товар не найден' });
+    }
+
+    // Получить информацию о разделе
+    const section = await Section.findById(product.section);
+
+    if (!section) {
+      return res.status(404).json({ message: 'Раздел не найден' });
+    }
+
+    // Получить информацию о категории
+    const category = await Category.findById(section.category);
+
+    if (!category) {
+      return res.status(404).json({ message: 'Категория не найдена' });
+    }
+
+    // Вернуть полную информацию о товаре и его родителях
+    res.status(200).json({
+      product,
+      section: {
+        name: section.sectionName,
+      },
+      category: {
+        title: category.title,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
 
 // Retrieving popular products
 router.get('/products/popular', async (req, res) => {
