@@ -18,7 +18,8 @@ const Product = new Schema({
         },
     ],
     stock_quantity: Number,
-    Section: Schema.Types.ObjectId
+    Section: Schema.Types.ObjectId,
+    urlLink: String
 });
 
 module.exports = model('Product', Product);
