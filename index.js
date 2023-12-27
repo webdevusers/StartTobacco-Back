@@ -23,7 +23,7 @@ app.use("/seo", seoRouter)
 
 const start = async () => {
     try {
-        await mongoose.connect('mongodb+srv://devusersvue:jXSFM1kfpDMF7RB7@starttobacco.qp2fq2p.mongodb.net/?retryWrites=true&w=majority');
+        await mongoose.connect('');
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });    } catch (e) {
