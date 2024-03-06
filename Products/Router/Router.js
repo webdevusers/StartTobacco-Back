@@ -89,8 +89,8 @@ router.delete("/category/:id", async (req, res) => {
 router.put("/category/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, image } = req.body;
-    await Category.findByIdAndUpdate(id, { categoryName: title, image });
+    const { title, image, description} = req.body;
+    await Category.findByIdAndUpdate(id, { categoryName: title, image, description });
     res.status(200).json({ message: "Категория успешно обновлена" });
   } catch (error) {
     res.status(500).json({ error: "Ошибка сервера" });
@@ -149,8 +149,8 @@ router.delete("/section/:id", async (req, res) => {
 router.put("/section/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { sectionName, categoryId } = req.body;
-    await Section.findByIdAndUpdate(id, { sectionName, category: categoryId });
+    const { sectionName, categoryId, description } = req.body;
+    await Section.findByIdAndUpdate(id, { sectionName,  description, category: categoryId });
     res.status(200).json({ message: "Раздел успешно обновлен" });
   } catch (error) {
     res.status(500).json({ error: "Ошибка сервера" });
