@@ -48,6 +48,17 @@ class OrderController {
             console.log(e);
         }
     }
+async delete(req, res) {
+    try {
+        const {id} = req.body;
+
+        const item = await Order.findByIdAndDelete(id)
+
+        res.status(200).json({status: "Succesfully"})
+    } catch(e) {
+        res.status(500).json(e)
+    }
+}
     
 }
 
