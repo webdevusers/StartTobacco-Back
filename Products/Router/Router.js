@@ -295,7 +295,7 @@ router.get("/products/sale", async (req, res) => {
 router.get("/section/find/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const section = await Section.findOne({urlLink: id}).populate("products");
+    const section = await Section.findById(id).populate("products");
     if (!section) {
       return res.status(404).json({ status: "Section not found" });
     }
